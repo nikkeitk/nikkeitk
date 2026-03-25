@@ -9,8 +9,8 @@
         {{ if .Title }}<h1 class="hx:text-center hx:mt-2 hx:text-4xl hx:font-bold hx:tracking-tight hx:text-slate-900 hx:dark:text-slate-100">{{ .Title }}</h1>{{ end }}
         <div class="content">{{ .Content }}</div>
         
-        {{- $pages := where .Site.RegularPages "Section" "blog" -}}
-        {{- $pages = $pages.ByDate.Reverse -}}
+        {{- $blogSection := .Site.GetPage "section" "blog" -}}
+        {{- $pages := $blogSection.RegularPages.ByDate.Reverse -}}
         
         {{- range $pages.GroupByDate "2006 - January" }}
           <div class="hx:mb-10">
@@ -32,8 +32,8 @@
       <div class="hx:sticky hx:top-24 hx:max-h-[calc(100vh-var(--navbar-height))] hx:overflow-y-auto hx:pr-4 hx:pb-10">
         <p class="hx:mb-4 hx:font-semibold hx:tracking-tight hx:text-sm">On this page</p>
         <ul class="hx:text-sm hx:space-y-2 hx:text-slate-500 hx:dark:text-slate-400">
-          {{- $pages := where .Site.RegularPages "Section" "blog" -}}
-          {{- $pages = $pages.ByDate.Reverse -}}
+          {{- $blogSection := .Site.GetPage "section" "blog" -}}
+          {{- $pages := $blogSection.RegularPages.ByDate.Reverse -}}
           {{- range $pages.GroupByDate "2006 - January" }}
             <li><a href="#{{ .Key | urlize }}" class="hover:hx:text-slate-900 hx:dark:hover:text-slate-100">{{ .Key }}</a></li>
           {{- end }}
