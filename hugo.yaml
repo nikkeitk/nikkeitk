@@ -1,6 +1,8 @@
 # Hugo configuration file
 title: NikkeiTK
 buildFuture: true
+languageCode: pt-br
+defaultContentLanguage: pt-br
 
 # import hextra as module
 module:
@@ -19,10 +21,10 @@ markup:
 
 menu:
   main:
-    - name: About
+    - name: Sobre
       pageRef: /about
       weight: 1
-    - name: Search
+    - name: Buscar
       weight: 2
       params:
         type: search
