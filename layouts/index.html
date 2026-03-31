@@ -46,6 +46,41 @@
             <li><a href="https://github.com/nikkeitk" target="_blank">GitHub</a></li>
           </ul>
         </div>
+
+        <div class="content-box">
+          <h3>Preferência Visual</h3>
+          <div style="padding: 5px 0;">
+            <button id="theme-toggle" style="width: 100%; font-weight: bold; text-transform: uppercase; background: var(--bg-box-header); border: 1px solid var(--border-main); color: var(--text-main); font-size: 11px; cursor: pointer; padding: 6px 0; border-radius: 0; box-shadow: inset 1px 1px 0 #fff, 1px 1px 0 #000;">
+              Alternar Modo
+            </button>
+          </div>
+          <script>
+            (function() {
+              const html = document.documentElement;
+              const btn = document.getElementById('theme-toggle');
+              
+              function updateBtn() {
+                const isDark = html.classList.contains('dark');
+                btn.textContent = isDark ? 'MODO CLARO' : 'MODO ESCURO';
+              }
+              
+              btn.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                  html.classList.remove('dark');
+                  localStorage.setItem('theme', 'light');
+                } else {
+                  html.classList.add('dark');
+                  localStorage.setItem('theme', 'dark');
+                }
+                updateBtn();
+              });
+              
+              updateBtn();
+              const observer = new MutationObserver(updateBtn);
+              observer.observe(html, { attributes: true, attributeFilter: ['class'] });
+            })();
+          </script>
+        </div>
         
         <div class="content-box">
           <h3 style="border-bottom: 1px dotted #999; margin-bottom: 5px; padding-bottom: 3px;">Zen / Kotowaza</h3>

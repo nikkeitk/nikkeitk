@@ -1,21 +1,51 @@
+:root {
+    --bg-body: #efefef;
+    --bg-container: #ffffff;
+    --bg-box: #ffffff;
+    --bg-box-header: #e8e8e8;
+    --bg-accent: #fafafa;
+    --border-main: #999999;
+    --border-soft: #cccccc;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --link-color: #0000ff;
+    --link-visited: #800080;
+    --link-hover: #ff0000;
+}
+
+[class~="dark"] {
+    --bg-body: #121212;
+    --bg-container: #1e1e1e;
+    --bg-box: #1e1e1e;
+    --bg-box-header: #333333;
+    --bg-accent: #252525;
+    --border-main: #666666;
+    --border-soft: #444444;
+    --text-main: #f0f0f0; /* More contrast for readability */
+    --text-muted: #bbbbbb; /* Better contrast for small text */
+    --link-color: #7abfff;
+    --link-visited: #d1b3ff;
+    --link-hover: #ffadad;
+}
+
 body {
-    background-color: #efefef !important;
+    background-color: var(--bg-body) !important;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi2rVrf2RgYMAK/v///w8GWAA2AwhwK4f4eAAAAABJRU5ErkJggg==') !important;
     background-repeat: repeat !important;
     font-family: "MS PGothic", "Meiryo", "tahoma", sans-serif !important;
-    color: #333333 !important;
+    color: var(--text-main) !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
 ::-webkit-scrollbar {
     width: 14px;
-    background-color: #f0f0f0;
-    border-left: 1px solid #cccccc;
+    background-color: var(--bg-box-header);
+    border-left: 1px solid var(--border-soft);
 }
 ::-webkit-scrollbar-thumb {
-    background-color: #c0c0c0;
-    border: 1px outset #eeeeee;
+    background-color: var(--border-main);
+    border: 1px outset var(--border-soft);
 }
 
 .page-wrapper {
@@ -30,8 +60,8 @@ body {
 .site-container {
     width: 800px;
     max-width: 95vw;
-    background-color: #ffffff;
-    border: 1px solid #999999;
+    background-color: var(--bg-container);
+    border: 1px solid var(--border-main);
     padding: 10px;
     font-family: inherit;
     font-size: 13px !important;
@@ -39,48 +69,35 @@ body {
 
 .site-header {
     text-align: center;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--border-soft);
     padding: 10px;
     margin-bottom: 10px;
+    background-color: var(--bg-box);
 }
 
-.site-header h1 {
-    font-family: "MS PGothic", "Meiryo", sans-serif !important;
-    color: #333333 !important;
-    font-size: 26px !important;
-    margin: 10px 0 !important;
-    font-weight: bold;
-    letter-spacing: 1px;
+/* Ensure header specific spans respect main text color in dark mode */
+.site-header span, .site-header h1, .site-header h2, .site-header p {
+    color: var(--text-main) !important;
 }
 
-.image-placeholder {
-    width: 600px;
-    height: 150px;
-    background-color: #f7f7f7;
-    border: 1px dashed #aaaaaa;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888888;
-    font-size: 12px;
+/* Footer elements and mute text overrides */
+.site-footer p, .site-footer span, .post-date, 
+.content-box div[id="zen-widget"] span {
+    color: var(--text-muted) !important;
 }
 
-@media (max-width: 650px) {
-    .image-placeholder {
-        width: 100%;
-        height: 100px;
-    }
+#zen-widget div {
+    color: var(--text-main) !important;
 }
 
 .news-ticker {
-    background-color: #f0f0f0;
-    color: #333333;
+    background-color: var(--bg-box-header);
+    color: var(--text-main);
     font-family: "MS PGothic", "tahoma", inherit;
     font-size: 12px;
     padding: 2px;
     margin-bottom: 12px;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--border-soft);
 }
 
 .content-layout {
@@ -96,10 +113,6 @@ body {
     width: 180px;
     flex-shrink: 0;
 }
-@media (max-width: 700px) {
-    .site-sidebar { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
-    .site-sidebar .content-box { flex: 1; min-width: 140px; }
-}
 
 .main-content {
     flex-grow: 1;
@@ -107,16 +120,24 @@ body {
 }
 
 .content-box {
-    border: 1px solid #cccccc;
+    border: 1px solid var(--border-soft);
     padding: 8px;
+    background-color: var(--bg-box);
     margin-bottom: 10px;
+}
+
+.content-box div[style*="background: #fafafa"], 
+.content-box div[style*="background: rgb(250, 250, 250)"] {
+    background-color: var(--bg-accent) !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border-soft) !important;
 }
 
 .content-box h2, .content-box h3 {
     margin-top: 0 !important;
-    background-color: #e8e8e8;
-    color: #333333 !important;
-    border-bottom: 1px dotted #999999;
+    background-color: var(--bg-box-header);
+    color: var(--text-main) !important;
+    border-bottom: 1px dotted var(--border-main);
     padding: 2px 5px;
     font-size: 14px !important;
     font-weight: bold;
@@ -133,15 +154,15 @@ body {
     line-height: 1.6;
 }
 
-.content-layout a, .content-box a, .post-list-table a {
-    color: #0000ff !important;
+a {
+    color: var(--link-color) !important;
     text-decoration: underline !important;
 }
-.content-layout a:visited {
-    color: #800080 !important;
+a:visited {
+    color: var(--link-visited) !important;
 }
-.content-layout a:hover {
-    color: #ff0000 !important;
+a:hover {
+    color: var(--link-hover) !important;
     background-color: transparent !important;
 }
 
@@ -151,30 +172,30 @@ body {
     font-size: 13px;
 }
 .post-list-table td {
-    border-bottom: 1px dashed #dddddd;
+    border-bottom: 1px dashed var(--border-soft);
 }
 .post-list-table .post-date {
-    color: #666666;
+    color: var(--text-muted);
     font-family: inherit;
 }
 
 .site-footer {
     text-align: center;
     font-size: 11px;
-    color: #888888;
+    color: var(--text-muted);
     margin-top: 20px;
     padding-top: 10px;
 }
 .site-footer hr {
     border: 0;
-    border-top: 1px solid #cccccc;
+    border-top: 1px solid var(--border-soft);
     margin-bottom: 10px;
 }
 
 .text-content {
     font-size: 13px;
     line-height: 1.5;
-    color: #333333;
+    color: var(--text-main);
 }
 
 img {
@@ -182,5 +203,10 @@ img {
 }
 
 nav.nx-bg-transparent {
-    display: none !important;
+    display: flex !important;
+    opacity: 0.8;
+}
+
+[class~="dark"] .nx-bg-transparent {
+    background-color: #000 !important;
 }
