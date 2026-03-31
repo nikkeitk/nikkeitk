@@ -1,42 +1,117 @@
 {{ define "main" }}
-  {{- $readMore := (T "readMore") | default "Read more →" -}}
-  <div class="hx:mx-auto hx:flex hextra-max-page-width">
-    {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" true) }}
-    <article class="hx:w-full hx:break-words hx:flex hx:min-h-[calc(100vh-var(--navbar-height))] hx:min-w-0 hx:justify-center hx:pb-8 hx:pr-[calc(env(safe-area-inset-right)-1.5rem)]">
-      <main id="content" class="hx:w-full hx:min-w-0 hextra-max-content-width hx:px-6 hx:pt-4 hx:md:px-12">
-        {{ partial "breadcrumb.html" (dict "page" . "enable" false) }}
-        <br class="hx:mt-1.5 hx:text-sm" />
-        {{ if .Title }}<h1 class="hx:text-center hx:mt-2 hx:text-4xl hx:font-bold hx:tracking-tight hx:text-slate-900 hx:dark:text-slate-100">{{ .Title }}</h1>{{ end }}
-        <div class="content">{{ .Content }}</div>
-        
-        {{- $pages := partial "utils/sort-pages" (dict "page" . "by" site.Params.blog.list.sortBy "order" site.Params.blog.list.sortOrder) -}}
-        
-        {{- range $pages.GroupByDate "2006 - January" }}
-          <div class="hx:mb-10">
-            <h2 id="{{ .Key | urlize }}" class="hx:mt-10 hx:text-3xl hx:font-bold hx:tracking-tight hx:text-slate-900 hx:dark:text-slate-100">{{ .Key }}</h2>
-            <hr class="hx:my-4 hx:border-slate-200 hx:dark:border-slate-800" />
-            <ul class="hx:list-disc hx:pl-6 hx:space-y-4 hx:text-slate-700 hx:dark:text-slate-300">
-              {{- range .Pages }}
-                <li>
-                  <a class="hx:text-[color:hsl(var(--primary-hue),100%,50%)] hx:underline hx:underline-offset-2 hx:decoration-from-font hx:text-lg" href="{{ .RelPermalink }}">{{ .Title }} {{ if .Params.subtitle }} | {{ .Params.subtitle }}{{ end }}</a>
-                </li>
-              {{- end }}
-            </ul>
-          </div>
-        {{- end }}
-      </main>
-    </article>
+<div class="page-wrapper">
+  <div class="site-container">
+    
+    <!-- Banner de Seção: Estilo "Cru" e Alinhado com a Index -->
+    <div class="site-header" style="text-align: left; padding: 15px; border: 1px solid var(--border-soft); margin-bottom: 20px; background-color: var(--bg-box);">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <h1 style="font-size: 24px; margin: 0; color: var(--text-main); font-family: 'MS PGothic', Meiryo, sans-serif; font-weight: bold;">
+          Blog Archive (＃`Д´)
+        </h1>
+        <a href="/" style="font-weight: bold; font-size: 13px;">&laquo; Voltar para o Início</a>
+      </div>
+      <p style="font-size: 11px; color: var(--text-muted); margin-top: 5px; border-top: 1px solid var(--border-soft); display: inline-block; padding-top: 2px;">
+        NikkeiTK / Yuri Takahashi
+      </p>
+    </div>
 
-    <div class="hx:hidden xl:hx:block hx:w-64 hx:shrink-0 hx:pt-8 hx:pl-8">
-      <div class="hx:sticky hx:top-24 hx:max-h-[calc(100vh-var(--navbar-height))] hx:overflow-y-auto hx:pr-4 hx:pb-10">
-        <p class="hx:mb-4 hx:font-semibold hx:tracking-tight hx:text-sm">On this page</p>
-        <ul class="hx:text-sm hx:space-y-2 hx:text-slate-500 hx:dark:text-slate-400">
-          {{- $pages := partial "utils/sort-pages" (dict "page" . "by" site.Params.blog.list.sortBy "order" site.Params.blog.list.sortOrder) -}}
-          {{- range $pages.GroupByDate "2006 - January" }}
-            <li><a href="#{{ .Key | urlize }}" class="hover:hx:text-slate-900 hx:dark:hover:text-slate-100">{{ .Key }}</a></li>
-          {{- end }}
-        </ul>
+    <div class="content-layout">
+      <!-- Arquivo de Blog -->
+      <div class="main-content">
+        <div class="content-box">
+          <h2>{{ .Title | default "Lista de Postagens" }}</h2>
+          <div class="text-content">
+            {{ .Content }}
+            
+            {{- $pages := .RegularPages.ByDate.Reverse -}}
+            {{- range $pages.GroupByDate "2006" }}
+              <div style="margin-bottom: 25px; padding-top: 10px;">
+                <h3 style="font-size: 16px; color: var(--text-main); border-bottom: 1px solid var(--border-main); padding-bottom: 3px; background: none; border-top: none; border-right: none; padding-left: 5px;">{{ .Key }}</h3>
+                
+                {{- range .Pages.GroupByDate "January" }}
+                <div style="margin-top: 10px;">
+                  <h4 style="font-size: 12px; font-weight: bold; color: var(--text-muted); margin-bottom: 10px;">• {{ .Key | upper }}</h4>
+                  
+                  <table class="post-list-table" cellspacing="0" cellpadding="4" style="margin-left: 10px;">
+                    {{- range .Pages }}
+                    <tr>
+                      <td width="100" style="vertical-align: top; padding-top: 4px; font-size: 11px; color: var(--text-muted); font-family: monospace;">[{{ .Date.Format "02/01/06" }}]</td>
+                      <td style="padding-top: 4px; padding-bottom: 12px;">
+                        <a href="{{ .RelPermalink }}" style="font-weight: bold; font-size: 15px;">{{ .Title }}</a>
+                        {{ if .Summary }}
+                          <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4;">
+                            {{ .Summary | plainify | truncate 180 }}
+                          </div>
+                        {{ end }}
+                      </td>
+                    </tr>
+                    {{- end }}
+                  </table>
+                </div>
+                {{- end }}
+              </div>
+            {{- end }}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sidebar Blog Minimalista -->
+      <div class="site-sidebar">
+         <div class="content-box">
+           <h3>Ações</h3>
+           <ul>
+             <li><a href="/">Voltar para Home</a></li>
+             <li><a href="/about/">Sobre Yuri</a></li>
+           </ul>
+         </div>
+
+         <div class="content-box">
+          <h3>Preferência Visual</h3>
+          <div style="padding: 5px 0;">
+            <button id="theme-toggle" style="width: 100%; font-weight: bold; text-transform: uppercase; background: var(--bg-box-header); border: 1px solid var(--border-main); color: var(--text-main); font-size: 11px; cursor: pointer; padding: 6px 0; border-radius: 0; box-shadow: inset 1px 1px 0 #fff, 1px 1px 0 #000;">
+              Alternar Modo
+            </button>
+          </div>
+          <script>
+            (function() {
+              const html = document.documentElement;
+              const btn = document.getElementById('theme-toggle');
+              function updateBtn() {
+                const isDark = html.classList.contains('dark');
+                btn.textContent = isDark ? 'MODO CLARO' : 'MODO ESCURO';
+              }
+              btn.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                  html.classList.remove('dark');
+                  localStorage.setItem('theme', 'light');
+                } else {
+                  html.classList.add('dark');
+                  localStorage.setItem('theme', 'dark');
+                }
+                updateBtn();
+              });
+              updateBtn();
+              const observer = new MutationObserver(updateBtn);
+              observer.observe(html, { attributes: true, attributeFilter: ['class'] });
+            })();
+          </script>
+        </div>
+
+         <div class="content-box" style="text-align: center; border-style: dashed;">
+           <span style="font-size: 11px; color: var(--text-muted);">RSS Feed</span><br>
+           <a href="/index.xml">
+              <img src="https://img.shields.io/badge/RSS-FFA500?style=for-the-badge&logo=rss&logoColor=white" alt="RSS" style="height: 14px; image-rendering: pixelated; margin-top: 5px;">
+           </a>
+         </div>
       </div>
     </div>
+
+    <!-- Rodapé Padrão -->
+    <div class="site-footer" style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 30px; padding-top: 10px; border-top: 1px solid var(--border-soft);">
+      <p>Copyright &copy; 2004-2026 NikkeiTK. Todos os direitos reservados.</p>
+      <p style="font-size: 10px; margin-top: 5px; opacity: 0.6;">Powered By Hugo/Hextra.</p>
+    </div>
+
   </div>
-{{- end -}}
+</div>
+{{ end }}
